@@ -21,8 +21,13 @@ api.interceptors.request.use((config) => {
 
 // Auth API
 export const authAPI = {
-  login: (username, password) => api.post('/auth/login', { username, password }),
+  login: (identifier, password) => api.post('/auth/login', { identifier, password }),
   getMe: () => api.get('/auth/me'),
+  createAdmin: (data) => api.post('/auth/create-admin', data),
+  // Forgot Password
+  forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
+  verifyOTP: (email, otp) => api.post('/auth/verify-otp', { email, otp }),
+  resetPassword: (email, otp, newPassword) => api.post('/auth/reset-password', { email, otp, newPassword }),
 };
 
 // Profile API

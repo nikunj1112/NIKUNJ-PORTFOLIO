@@ -33,11 +33,15 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = async (username, password) => {
-    const res = await authAPI.login(username, password);
+  const login = async (identifier, password) => {
+    const res = await authAPI.login(identifier, password);
     localStorage.setItem('token', res.data.token);
-    // Set user from the response - backend returns { _id, username, token }
-    setUser({ _id: res.data._id, username: res.data.username });
+    // Set user from the response - backend returns { _id, username, email, token }
+    setUser({ 
+      _id: res.data._id, 
+      username: res.data.username,
+      email: res.data.email 
+    });
     return res.data;
   };
 

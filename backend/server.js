@@ -45,15 +45,25 @@ const seedDatabase = async () => {
     await Skill.deleteMany({});
     await Project.deleteMany({});
     await Message.deleteMany({});
-    
-    // Check if admin exists, if not create one
-    let admin = await User.findOne({ username: 'admin' });
+
+    // Check if admin exists, if not create one (supports both username and email)
+    // Use email from environment variable
+    const adminEmail = process.env.EMAIL_USER || 'admin@example.com';
+    let admin = await User.findOne({ username: 'Nikunj rana' });
     if (!admin) {
+      // Also check by email from env
+      admin = await User.findOne({ email: adminEmail });
+    }
+
+    if (!admin) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash('Nikunj@2004', salt);
       admin = await User.create({
-        username: 'admin',
-        password: 'admin123'
+        username: 'Nikunj rana',
+        email: adminEmail,
+        password: hashedPassword,
       });
-      console.log('Admin user created: admin / admin123');
+      console.log(`Admin user created: Nikunj rana / ${adminEmail} / Nikunj@2004`);
     } else {
       console.log('Admin user already exists');
     }
@@ -126,7 +136,7 @@ const seedDatabase = async () => {
       profileImage: '',
       resume: '',
     };
-    
+
     await Profile.deleteMany({});
     await Profile.create(profile);
     console.log('Profile seeded');
@@ -142,15 +152,50 @@ const seedDatabase = async () => {
 // Seed endpoint
 app.post('/api/seed', async (req, res) => {
   const result = await seedDatabase();
+  const adminEmail = process.env.EMAIL_USER || 'admin@example.com';
   if (result) {
-    res.json({ message: 'Database seeded successfully!', credentials: 'admin / admin123' });
+    res.json({ message: 'Database seeded successfully!', credentials: `Nikunj rana / ${adminEmail} / Nikunj@2004` });
   } else {
     res.status(500).json({ message: 'Error seeding database' });
   }
 });
 
+
 const PORT = process.env.PORT || 3030;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
+
+  // Auto-create admin user on server start
+  const User = require('./models/User');
+  const bcrypt = require('bcryptjs');
+
+  try {
+    const adminEmail = process.env.EMAIL_USER || '8891nikunjrana@gmail.com';
+    const adminUsername = 'Nikunj rana';
+    const adminPassword = 'Nikunj@2004';
+
+    // Check if admin exists
+    const adminExists = await User.findOne({
+      $or: [
+        { username: adminUsername },
+        { email: adminEmail }
+      ]
+    });
+
+    if (!adminExists) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(adminPassword, salt);
+
+      await User.create({
+        username: adminUsername,
+        email: adminEmail,
+        password: hashedPassword
+      });
+
+
+    }
+  } catch (err) {
+    console.error('Admin creation error:', err.message);
+  }
 });
 

@@ -34,7 +34,7 @@ const Navbar = () => {
     >
       <div className="container-custom flex items-center justify-between">
         <Link to="/" className="text-2xl font-bold gradient-text">
-          Nikunj<span className="text-accent">.dev</span>
+          Nikunj<span className="gradient-text">.web</span>
         </Link>
 
         {/* Desktop Nav */}
