@@ -6,8 +6,10 @@ require('dotenv').config();
 const User = require('./models/User');
 
 const createAdmin = async () => {
+  const hashedPassword = await bcrypt.hash('Nikunj@2004', 10);
+  console.log('New hash:', hashedPassword);
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/nikunj-portfolio');
     console.log('Connected to MongoDB');
 
     // Use email from environment variable
@@ -21,25 +23,18 @@ const createAdmin = async () => {
       ]
     });
     
+    const newHash = hashedPassword;
     if (adminExists) {
-      console.log('Admin user already exists');
-      if (adminExists.email) {
-        console.log(`Email: ${adminExists.email}`);
-      }
+      console.log('Admin user already exists, updating password');
+      adminExists.password = newHash;
+      await adminExists.save();
     } else {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash('Nikunj@2004', salt);
-      
       const admin = await User.create({
         username: 'Nikunj rana',
         email: adminEmail,
-        password: hashedPassword,
+        password: newHash,
       });
-      
-      console.log('Admin user created successfully!');
-      console.log('Username: Nikunj rana');
-      console.log(`Email: ${adminEmail}`);
-      console.log('Password: Nikunj@2004');
+      console.log('Admin created successfully');
     }
     
     process.exit(0);

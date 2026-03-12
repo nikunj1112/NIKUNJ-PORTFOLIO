@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { profileAPI, projectsAPI, skillsAPI } from '../services/api';
+import { profileAPI, projectsAPI, skillsAPI, statsAPI } from '../services/api';
 
 const About = () => {
   const [profile, setProfile] = useState(null);
@@ -8,20 +8,23 @@ const About = () => {
     projects: 0,
     skills: 0,
   });
+  const [statsData, setStatsData] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [profileRes, projectsRes, skillsRes] = await Promise.all([
+        const [profileRes, projectsRes, skillsRes, statsRes] = await Promise.all([
           profileAPI.getProfile(),
           projectsAPI.getProjects(),
           skillsAPI.getSkills(),
+          statsAPI.getStats(),
         ]);
         setProfile(profileRes.data);
         setStats({
           projects: projectsRes.data?.length || 0,
           skills: skillsRes.data?.length || 0,
         });
+        setStatsData(statsRes.data);
       } catch (err) {
         console.error(err);
       }
@@ -29,9 +32,10 @@ const About = () => {
     loadData();
   }, []);
 
-  const statItems = [
-    { label: 'Projects Completed', value: stats.projects },
-    { label: 'Skills', value: stats.skills },
+  // Use database stats OR fallback to calculated counts
+  const statItems = statsData.length > 0 ? statsData : [
+    { label: 'Projects Completed', value: stats.projects.toString() },
+    { label: 'Skills', value: stats.skills.toString() },
     { label: 'Years Experience', value: '3+' },
     { label: 'Happy Clients', value: '10+' },
   ];
@@ -68,8 +72,8 @@ const About = () => {
                 <div className="text-center">
                   <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-accent to-soft-blue flex items-center justify-center">
                     {profile?.profileImage ? (
-                      <img 
-                        src={profile.profileImage} 
+                      <img
+                        src={profile.profileImage}
                         alt={profile.name}
                         className="w-full h-full object-cover rounded-full"
                       />
@@ -111,7 +115,6 @@ const About = () => {
             <p className="text-light-gray/70 mb-8 leading-relaxed">
               My journey in web development started with a curiosity for building things, and it has evolved into a professional career where I continuously learn and adapt to new technologies. I believe in writing clean, maintainable code and following best practices.
             </p>
-
             {/* Stats */}
             <div className="grid grid-cols-2 gap-4">
               {statItems.map((stat, index) => (

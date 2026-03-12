@@ -6,8 +6,10 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import Dashboard from './pages/admin/Dashboard';
 import ManageProfile from './pages/admin/ManageProfile';
 import ManageSkills from './pages/admin/ManageSkills';
+import ManageEducation from './pages/admin/ManageEducation';
 import ManageProjects from './pages/admin/ManageProjects';
 import ManageMessages from './pages/admin/ManageMessages';
+import ManageStats from './pages/admin/ManageStats';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -33,6 +35,8 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="profile" element={<ManageProfile />} />
             <Route path="skills" element={<ManageSkills />} />
+            <Route path="education" element={<ManageEducation />} />
+            <Route path="stats" element={<ManageStats />} />
             <Route path="projects" element={<ManageProjects />} />
             <Route path="messages" element={<ManageMessages />} />
           </Route>

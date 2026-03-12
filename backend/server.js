@@ -13,7 +13,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
+origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'],
   credentials: true,
 }));
 app.use(express.json());
@@ -24,6 +24,8 @@ app.use('/api/profile', require('./routes/profileRoutes'));
 app.use('/api/skills', require('./routes/skillRoutes'));
 app.use('/api/projects', require('./routes/projectRoutes'));
 app.use('/api/messages', require('./routes/messageRoutes'));
+app.use('/api/education', require('./routes/educationRoutes'));
+app.use('/api/stats', require('./routes/statsRoutes'));
 app.use('/api/github', require('./routes/githubRoutes'));
 
 // Health check

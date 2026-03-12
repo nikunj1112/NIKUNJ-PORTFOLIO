@@ -59,6 +59,22 @@ export const messagesAPI = {
   deleteMessage: (id) => api.delete(`/messages/${id}`),
 };
 
+// Education API
+export const educationAPI = {
+  getEducation: () => api.get('/education'),
+  createEducation: (data) => api.post('/education', data),
+  updateEducation: (id, data) => api.put(`/education/${id}`, data),
+  deleteEducation: (id) => api.delete(`/education/${id}`),
+};
+
+// Stats API
+export const statsAPI = {
+  getStats: () => api.get('/stats'),
+  createStat: (data) => api.post('/stats', data),
+  updateStat: (id, data) => api.put(`/stats/${id}`, data),
+  deleteStat: (id) => api.delete(`/stats/${id}`),
+};
+
 // GitHub API
 export const githubAPI = {
   getRepos: () => api.get('/github/repos'),

@@ -37,6 +37,20 @@ const profileSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  stats: {
+    type: [
+      {
+        label: { type: String, default: '' },
+        value: { type: String, default: '' },
+      },
+    ],
+    default: [
+      { label: 'Projects Completed', value: '0' },
+      { label: 'Skills', value: '0' },
+      { label: 'Years Experience', value: '0' },
+      { label: 'Happy Clients', value: '0' },
+    ],
+  },
 });
 
 module.exports = mongoose.model('Profile', profileSchema);

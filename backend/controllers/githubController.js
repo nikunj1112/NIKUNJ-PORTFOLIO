@@ -1,18 +1,23 @@
 const axios = require('axios');
 
 const GITHUB_USERNAME = 'nikunj1112';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
 const GITHUB_API_URL = `https://api.github.com/users/${GITHUB_USERNAME}`;
+
+const headers = {
+  'User-Agent': 'nikunj-portfolio'
+};
 
 // @desc    Get GitHub user stats
 // @route   GET /api/github/stats
 // @access  Public
 const getGitHubStats = async (req, res) => {
   try {
-    const response = await axios.get(GITHUB_API_URL);
+    const response = await axios.get(GITHUB_API_URL, { headers });
     const userData = response.data;
 
     // Get repos to calculate top languages
-    const reposResponse = await axios.get(`${GITHUB_API_URL}/repos?sort=updated&per_page=100`);
+    const reposResponse = await axios.get(`${GITHUB_API_URL}/repos?sort=updated&per_page=100`, { headers });
     const repos = reposResponse.data;
 
     // Calculate top languages
@@ -45,7 +50,7 @@ const getGitHubStats = async (req, res) => {
 // @access  Public
 const getGitHubRepos = async (req, res) => {
   try {
-    const response = await axios.get(`${GITHUB_API_URL}/repos?sort=updated&per_page=20`);
+    const response = await axios.get(`${GITHUB_API_URL}/repos?sort=updated&per_page=20`, { headers });
     const repos = response.data.map(repo => ({
       id: repo.id,
       name: repo.name,

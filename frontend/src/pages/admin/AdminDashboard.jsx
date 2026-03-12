@@ -12,6 +12,8 @@ const AdminDashboard = () => {
     { path: '/admin/dashboard', label: 'Dashboard', icon: '📊' },
     { path: '/admin/profile', label: 'Profile', icon: '👤' },
     { path: '/admin/skills', label: 'Skills', icon: '💼' },
+    { path: '/admin/education', label: 'Education', icon: '🎓' },
+    { path: '/admin/stats', label: 'Stats', icon: '📈' },
     { path: '/admin/projects', label: 'Projects', icon: '🚀' },
     { path: '/admin/messages', label: 'Messages', icon: '💬' },
   ];
